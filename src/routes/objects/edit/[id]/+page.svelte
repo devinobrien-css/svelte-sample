@@ -53,12 +53,12 @@
         <br/>
         <br/>
         
-        <h1 class="text-4xl">edit by id: {data.id}</h1>
+        <h1 class="text-4xl">Edit Record: {data.id}</h1>
 
         <hr class="my-2"/>
 
         <form class="flex flex-col">
-            <label for="name">name</label>
+            <label for="name">Name</label>
             <input 
                 type="text" 
                 id="name" 
@@ -70,7 +70,7 @@
                 class="border p-2 mb-4 rounded" 
             />
 
-            <label for="description">description</label>
+            <label for="description">Description</label>
             <textarea 
                 id="description" 
                 name="description" 

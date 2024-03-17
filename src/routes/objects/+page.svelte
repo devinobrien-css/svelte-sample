@@ -1,17 +1,43 @@
 
 <script>
 	import { writable } from 'svelte/store';
-    
+    import Button from "../../components/Button.svelte";
+
     /** @type {import('./$types').PageData} */
     export let data = {
         objects: [],
     };
+
+    let search = writable('');
+
+    search.subscribe((value) => {
+        console.log(value)
+    });
+
+    $: console.log($search)
 </script>
 
 <div class="min-h-screen border flex flex-col"> 
     <div class="m-auto w-1/2 p-10">
         <h1 class="text-4xl mb-2">List Objects</h1>
-        <hr/>
+
+        <form class="flex justify-between">
+            <input 
+                type="text" 
+                id="search" 
+                name="search" 
+                value={$search} 
+                placeholder="Search..."
+                class="border p-2 rounded w-4/5"
+                on:change={(e) => $search = e?.target?.value }
+            />
+            <Button 
+                text="Search" 
+                style="submit"
+            />
+        </form>
+
+
         {#if !data.objects}
             <div class="my-16 w-full">
                 <svg class="mx-auto size-16" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" {...$$props}>
@@ -27,15 +53,20 @@
                 </svg>
             </div>
         {:else if data.objects?.length > 0}
-            {#each data.objects as object}
-                <a 
-                    class={
-                        `block p-2 border-b hover:bg-gray-200 transition-all`
-                    }
-                    href={`/objects/edit/${object.id}`}>
-                    {object.name}
-                </a>
-            {/each}
+            <div class="max-h-[50vh] overflow-y-auto">        
+                {#each data.objects as object}
+                    {#if object.name.toLowerCase().includes($search.toLowerCase()) || object.description.toLowerCase().includes($search.toLowerCase())}
+                        <a 
+                            class={
+                                `p-2 border-b hover:bg-gray-200 transition-all flex flex-col`
+                            }
+                            href={`/objects/edit/${object.id}`}>
+                            <span class="text-lg">{object.name}</span>
+                            <span class="text-sm font-light">{object.description}</span>
+                        </a>
+                    {/if}
+                {/each}
+            </div>
         {:else if data.objects?.length === 0}
             <p>No objects found</p>
         {/if}
